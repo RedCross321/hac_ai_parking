@@ -2,3 +2,17 @@ fastapi==0.115.6
 uvicorn[standard]==0.34.0
 sqlalchemy==2.0.36
 python-multipart==0.0.20
+pydantic==2.5.0
+
+# Computer Vision & Image Processing
+opencv-python==4.9.0.80
+pillow==10.2.0
+numpy==1.26.0
+
+# ML frameworks (for Pilot+ stage)
+# ultralytics==8.1.0  # YOLOv8 - uncomment when ready for ML models
+# torch==2.1.0        # PyTorch - uncomment when ready for ML models
+# torchvision==0.16.0
+
+# Utilities
+scikit-learn==1.3.0
