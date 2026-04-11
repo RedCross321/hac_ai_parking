@@ -17,6 +17,47 @@ async def lifespan(app: FastAPI):
     print("[→] Завершение работы приложения")
 
 
+from app.routers import captcha
+from app.routers import login
+from app.routers import password_reset
+
+from contextlib import asynccontextmanager
+import asyncio
+from app.database import SessionLocal
+from app import crud
+
+from app import crud
+from app.database import engine
+
+
+async def cleanup_task():
+    while True:
+        await asyncio.sleep(3600)
+        db = SessionLocal()
+
+        try:
+            crud.cleanup_expired_token(db)
+        finally:
+            db.close()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    task = asyncio.create_task(cleanup_task())
+    yield
+    task.cancel()
+
+app = FastAPI(lifespan=lifespan)
+
+
+
+origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+
+]
+
+# разрешение фронту отправлять запросы на бэк
+
 # создание нового объекта класса FastAPI
 app = FastAPI(
     title=settings.APP_NAME,
@@ -38,6 +79,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+app.include_router(login.router)
+app.include_router(password_reset.router)
+app.include_router(captcha.router)
 # Регистрация роутов
 app.include_router(test_mode_router)
 

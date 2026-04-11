@@ -1,25 +1,66 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import './App.css';
+import { useState } from 'react';
+import LoginForm from './components/LoginForm';
+import RegisterForm from './components/RegisterForm';
+import UserDashboard from './components/UserDashboard';
+import ForgotPasswordForm from './components/ForgotPasswordForm';
+import ResetPasswordForm from './components/ResetPasswordForm';
 
 function App() {
-  const [status, setStatus] = useState('Загрузка...');
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('access_token'));
+  // mode: 'login', 'register', 'forgot'
+  const [mode, setMode] = useState('login');
 
-  useEffect(() => {
-    axios.get('http://localhost:8000/ping')
-      .then(response => {
-        setStatus(`Статус: ${response.data.status}`);
-      })
-      .catch(error => {
-        console.error('Ошибка при запросе к API:', error);
-        setStatus('Ошибка соединения с сервером');
-      });
-  }, []);
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
+  const handleRegisterSuccess = () => {
+    setMode('login');
+  };
+
+  // Проверяем, есть ли в URL параметр token (для сброса пароля)
+  const urlParams = new URLSearchParams(window.location.search);
+  const resetToken = urlParams.get('token');
+
+  if (resetToken) {
+    // Если есть токен, показываем форму сброса пароля
+    return <ResetPasswordForm />;
+  }
+
+  if (isLoggedIn) {
+    return <UserDashboard onLogout={handleLogout} />;
+  }
 
   return (
-    <div className="App">
-      <h1>Анализатор парковочных мест</h1>
-      <p>{status}</p>
+    <div style={{ maxWidth: '400px', margin: '50px auto' }}>
+      {mode === 'register' && (
+        <>
+          <RegisterForm onSuccess={handleRegisterSuccess} />
+          <p>
+            Уже есть аккаунт?{' '}
+            <button onClick={() => setMode('login')}>Войти</button>
+          </p>
+        </>
+      )}
+      {mode === 'login' && (
+        <>
+          <LoginForm onLogin={handleLogin} />
+          <p>
+            Нет аккаунта?{' '}
+            <button onClick={() => setMode('register')}>Зарегистрироваться</button>
+          </p>
+          <p>
+            <button onClick={() => setMode('forgot')}>Забыли пароль?</button>
+          </p>
+        </>
+      )}
+      {mode === 'forgot' && (
+        <ForgotPasswordForm onBackToLogin={() => setMode('login')} />
+      )}
     </div>
   );
 }
