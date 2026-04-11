@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends
-from app import crud
-from app.dependencies import get_current_user, get_db
-from ..dependencies import oauth2_scheme
+from .. import crud
+from ..dependencies import get_current_user, get_db, oauth2_scheme
 from sqlalchemy.orm import Session
 
 router = APIRouter(prefix="/auth", tags=["auth"])

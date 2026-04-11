@@ -2,11 +2,9 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from datetime import timedelta
-# Импорты из наших модулей (убедись, что файлы созданы)
-from app import crud, models, schemas, dependencies
-from app.database import engine
-from app import auth
-from app.routers import captcha
+from .. import crud, models, schemas, dependencies, auth
+from ..database import engine
+from ..routers import captcha
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -66,11 +64,3 @@ def login(
 @router.get("/me", response_model=schemas.UserOut)
 def read_auth_me(current_user: models.User = Depends(dependencies.get_current_user)):
     return current_user
-
-
-# ========== ТВОИ БУДУЩИЕ ЭНДПОИНТЫ ДЛЯ PARKING ANALYZER ==========
-# Здесь можешь добавлять свои эндпоинты для анализа парковок
-# Например:
-# @app.get("/parking/status")
-# def get_parking_status(current_user: models.User = Depends(dependencies.get_current_user)):
-#     return {"message": f"Parking data for {current_user.username}"}

@@ -1,4 +1,4 @@
-from app import crud, schemas, dependencies
+from .. import crud, schemas, dependencies
 from sqlalchemy.orm import Session
 from fastapi import  HTTPException, Depends, status, APIRouter
 

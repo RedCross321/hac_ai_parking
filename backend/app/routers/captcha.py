@@ -59,7 +59,7 @@ async def verify_captcha(captcha_request: CaptchaVerifyRequest, request: Request
             if data.get("status") == "ok":
                 return {"status": "success", "message": "Validation passed", "host": data.get("host")}
             else:
-                raise HTTPException(status_code=400, detail=f"Validation failed: {data.get("message")}")
+                raise HTTPException(status_code=400, detail=f"Validation failed: {data.get('message')}")
     except httpx.RequestError as ex:
         raise HTTPException(status_code=503, detail=f"Error connecting to SmartCaptcha service: {ex}")
     except Exception as ex:
