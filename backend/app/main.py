@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .database import engine, Base
 from .routers.test_mode import router as test_mode_router
+from .routers.user import router as user_router
 from .core.config import settings
 from .routers import captcha, login, password_reset
 from contextlib import asynccontextmanager
@@ -54,6 +55,7 @@ app.include_router(login.router)
 app.include_router(password_reset.router)
 app.include_router(captcha.router)
 app.include_router(test_mode_router)
+app.include_router(user_router)
 
 
 @app.get("/ping")
