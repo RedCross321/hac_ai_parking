@@ -1,13 +1,30 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import captcha
 from app.routers import login
 
+from contextlib import asynccontextmanager
+import asyncio
+from app.database import SessionLocal
+from app import crud
 
-# Создание таблиц в БД при запуске
+async def cleanup_task():
+    while True:
+        await asyncio.sleep(3600)
+        db = SessionLocal()
 
+        try:
+            crud.cleanup_expired_token(db)
+        finally:
+            db.close()
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    task = asyncio.create_task(cleanup_task())
+    yield
+    task.cancel()
+
+app = FastAPI(lifespan=lifespan)
 
 origins = [
     "http://localhost:5173",

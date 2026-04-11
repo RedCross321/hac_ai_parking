@@ -5,6 +5,7 @@ from datetime import timedelta
 # Импорты из наших модулей (убедись, что файлы созданы)
 from app import crud, models, schemas, dependencies
 from app.database import engine
+from app import auth
 from app.routers import captcha
 
 models.Base.metadata.create_all(bind=engine)
@@ -53,8 +54,8 @@ def login(
             headers={"WWW-Authenticate": "Bearer"},
         )
     # Создаём токен
-    access_token_expires = timedelta(minutes=captcha.ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = captcha.create_access_token(
+    access_token_expires = timedelta(minutes=auth.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = auth.create_access_token(
         data={"sub": user.username}, 
         expires_delta=access_token_expires
     )
