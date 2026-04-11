@@ -47,11 +47,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 app.include_router(login.router)
 app.include_router(password_reset.router)
 app.include_router(captcha.router)
-# Регистрация роутов
 app.include_router(test_mode_router)
 
 # декоратор, регестрирующий функцию ping как обработчик GET по пути /ping

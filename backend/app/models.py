@@ -1,6 +1,7 @@
-from sqlalchemy import Column, Integer, String, DateTime
-from .database import Base
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Text, Boolean
+from sqlalchemy.orm import relationship, declarative_base
 from datetime import datetime
+from .database import Base
 
 class User(Base):
     __tablename__ = "users"
@@ -18,10 +19,6 @@ class TokenBlackList(Base):
     id = Column(Integer, primary_key=True, index=True)
     token = Column(String, unique=True, index=True, nullable=False)
     blacklisted_at = Column(DateTime, default=datetime.utcnow)
-from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Text, Boolean
-from sqlalchemy.orm import relationship, declarative_base
-from datetime import datetime
-from .database import Base
 
 class TestCamera(Base):
     """
