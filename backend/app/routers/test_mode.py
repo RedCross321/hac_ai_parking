@@ -115,6 +115,7 @@ async def upload_screenshot(
 
     file_path = save_uploaded_file(file, settings.UPLOAD_DIR)
 
+
     # Инференс модели
     inference_result = None
     if run_inference:
