@@ -8,11 +8,9 @@ load_dotenv()
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
-
 class CaptchaConfigResponse(BaseModel):
     """Схема ответа с конфигурацией капчи."""
     site_key: str
-
 
 @router.get("/captcha-config", response_model=CaptchaConfigResponse)
 async def get_captcha_config():
@@ -31,7 +29,6 @@ async def get_captcha_config():
         raise HTTPException(status_code=500, detail="SmartCaptcha Site Key is not configured on server.")
 
     return CaptchaConfigResponse(site_key=site_key)
-
 
 class CaptchaVerifyRequest(BaseModel):
     """Схема запроса на проверку капчи."""
