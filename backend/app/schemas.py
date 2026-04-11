@@ -1,4 +1,6 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
+from datetime import datetime
+from typing import Optional
 
 class UserCreate(BaseModel):
     username: str
@@ -19,3 +21,11 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: str | None = None
+
+# Новые схемы для восстановления пароля
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str
