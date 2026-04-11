@@ -96,6 +96,18 @@ def read_users_me(current_user: models.User = Depends(dependencies.get_current_u
     return current_user
 
 
+# Алиас для /auth/me
+@app.get("/auth/me", response_model=schemas.UserOut)
+def read_auth_me(current_user: models.User = Depends(dependencies.get_current_user)):
+    """
+    GET /auth/me
+    Алиас для /users/me
+    Требует заголовок Authorization: Bearer <token>
+    Возвращает данные авторизованного пользователя
+    """
+    return current_user
+
+
 # ========== ТВОИ БУДУЩИЕ ЭНДПОИНТЫ ДЛЯ PARKING ANALYZER ==========
 # Здесь можешь добавлять свои эндпоинты для анализа парковок
 # Например:
