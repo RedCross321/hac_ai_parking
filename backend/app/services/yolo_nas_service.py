@@ -1,29 +1,25 @@
 import os
 import sys
 import torch
-import warnings
 
-# 1. Сначала добавляем безопасные глобальные объекты для OmegaConf
 try:
     from omegaconf import ListConfig, DictConfig, OmegaConf, Container
-    from omegaconf.base import ContainerMetadata, NodeMetadata
+    from omegaconf.base import ContainerMetadata, Metadata
 
     torch.serialization.add_safe_globals([
         ListConfig, DictConfig, OmegaConf, Container,
-        ContainerMetadata, NodeMetadata,
+        ContainerMetadata, Metadata,
         list, dict, tuple, set, str, int, float, bool, type(None)
     ])
     print("[✓] OmegaConf types added to torch safe globals", file=sys.stderr)
 except ImportError as e:
     print(f"[⚠] OmegaConf not available: {e}", file=sys.stderr)
 
-# 2. Переопределяем torch.load для отключения weights_only по умолчанию
 if not hasattr(torch.load, '_sg_legacy_patched'):
     _original_torch_load = torch.load
 
 
     def _patched_torch_load(*args, **kwargs):
-        # Если weights_only не указан явно — отключаем его для совместимости
         if 'weights_only' not in kwargs:
             kwargs['weights_only'] = False
         return _original_torch_load(*args, **kwargs)
@@ -33,13 +29,11 @@ if not hasattr(torch.load, '_sg_legacy_patched'):
     torch.load = _patched_torch_load
     print("[✓] torch.load patched for legacy checkpoint compatibility", file=sys.stderr)
 
-# =============================================================================
-# ✅ ТОЛЬКО ТЕПЕРЬ можно импортировать зависимые модули
-# =============================================================================
 import logging
-from PIL import Image
 from typing import List, Dict, Optional, Any
-from super_gradients.training import models  # Теперь импорт безопасен
+import warnings
+warnings.filterwarnings("ignore", message=".*pkg_resources is deprecated.*")
+from super_gradients.training import models
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +42,6 @@ class YoloNasService:
     def __init__(self, config: dict):
         self.config = config
 
-        # Логика выбора устройства (без изменений)
         device_setting = config.get('device', 'auto')
         if device_setting == 'auto':
             if torch.cuda.is_available():
@@ -64,10 +57,7 @@ class YoloNasService:
         self.confidence_threshold = config.get('confidence_threshold', 0.35)
         logger.info(f"YoloNasService initialized on device: {self.device}")
 
-        # ❌ УДАЛИТЕ вызов self._enable_legacy_torch_load() — он больше не нужен здесь
-
     def load_model(self) -> None:
-        """Загружает модель YOLO-NAS с указанными весами."""
         checkpoint_path = self.config['checkpoint_path']
 
         if not os.path.exists(checkpoint_path):
@@ -81,7 +71,6 @@ class YoloNasService:
         else:
             pretrained_weights = pretrained_setting
 
-        # Загрузка модели — теперь должна работать
         self.model = models.get(
             model_name=self.config['model_name'],
             num_classes=self.config['num_classes'],
@@ -114,7 +103,6 @@ class YoloNasService:
             "not_free_count": 0,
             "partially_free_count": 0,
             "total_count": 0,
-            # ✅ detections больше не добавляем
         }
 
         classes = self.config.get('classes', [
@@ -133,7 +121,6 @@ class YoloNasService:
                 class_id = int(labels[i])
                 cls_name = classes[class_id] if class_id < len(classes) else f"class_{class_id}"
 
-                # ✅ Только подсчёт, без формирования детекций
                 result["total_count"] += 1
                 if cls_name == "free_parking_space":
                     result["free_count"] += 1
@@ -161,10 +148,7 @@ class YoloNasService:
                 })
         return results
 
-
-# Глобальный экземпляр сервиса (ленивая инициализация)
 _yolo_service: Optional[YoloNasService] = None
-
 
 def get_yolo_service() -> YoloNasService:
     """
