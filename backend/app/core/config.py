@@ -3,12 +3,17 @@ from typing import List, Optional
 
 
 class Settings(BaseSettings):
+    
     # Общие настройки
     APP_NAME: str = "PEasy"
     DEBUG: bool = True
 
     # База данных
     DATABASE_URL: str = "sqlite:///./test_mode.db"
+
+    # ключи для капчи
+    YANDEX_SMARTCAPTCHA_SITE_KEY: str
+    YANDEX_SMARTCAPTCHA_SERVER_KEY: str
 
     # Настройки YOLO-NAS
     YOLO_MODEL_NAME: str = "yolo_nas_l"
