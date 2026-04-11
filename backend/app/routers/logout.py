@@ -5,12 +5,22 @@ from sqlalchemy.orm import Session
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
+
 @router.post("/logout")
 async def logout(
     token: str = Depends(oauth2_scheme),
     db: Session = Depends(get_db)
-    ):
-    
+):
+    """
+    Выйти из системы, добавив токен в черный список.
+
+    Args:
+        token: JWT токен пользователя.
+        db: Сессия базы данных.
+
+    Returns:
+        Сообщение об успешном выходе.
+    """
     crud.add_token_to_blacklist(db, token)
     return {"message": "Token has been invalidated. You are logged out."}
     

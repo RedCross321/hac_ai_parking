@@ -3,7 +3,9 @@ from sqlalchemy.orm import relationship, declarative_base
 from datetime import datetime
 from .database import Base
 
+
 class User(Base):
+    """Модель пользователя."""
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -13,16 +15,19 @@ class User(Base):
     reset_token = Column(String, nullable=True)
     reset_token_expires = Column(DateTime, nullable=True)
 
+
 class TokenBlackList(Base):
+    """Модель черного списка токенов."""
     __tablename__ = "token_blacklist"
 
     id = Column(Integer, primary_key=True, index=True)
     token = Column(String, unique=True, index=True, nullable=False)
     blacklisted_at = Column(DateTime, default=datetime.utcnow)
 
+
 class TestCamera(Base):
     """
-    Камера в тестовом режиме
+    Камера в тестовом режиме.
     """
     __tablename__ = "test_cameras"
 
@@ -31,7 +36,7 @@ class TestCamera(Base):
     location = Column(String(500))
     latitude = Column(Float)
     longitude = Column(Float)
-    status = Column(String(50), default="unknown")  # ok, camera_unreachable, unknown
+    status = Column(String(50), default="unknown")
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -40,7 +45,7 @@ class TestCamera(Base):
 
 class TestSnapshot(Base):
     """
-    Снимок с камеры в тестовом режиме
+    Снимок с камеры в тестовом режиме.
     """
     __tablename__ = "test_snapshots"
 
@@ -51,7 +56,7 @@ class TestSnapshot(Base):
     not_free_count = Column(Integer, default=0)
     partially_free_count = Column(Integer, default=0)
     total_count = Column(Integer, default=0)
-    inference_status = Column(String(50), default="pending")  # pending, completed, failed
+    inference_status = Column(String(50), default="pending")
     error_message = Column(Text)
     created_at = Column(DateTime, default=datetime.utcnow)
 
@@ -60,7 +65,7 @@ class TestSnapshot(Base):
 
 class UserRequest(Base):
     """
-    Логирование запросов пользователей
+    Логирование запросов пользователей.
     """
     __tablename__ = "user_requests"
 

@@ -3,21 +3,22 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from .core.config import settings
 
-# Создание движка БД
 engine = create_engine(
     settings.DATABASE_URL,
-    connect_args={"check_same_thread": False}  # Только для SQLite
+    connect_args={"check_same_thread": False}
 )
 
-# Создание сессии
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Базовый класс для моделей
 Base = declarative_base()
+
 
 def get_db():
     """
-    Dependency для получения сессии БД.
+    Dependency для получения сессии базы данных.
+
+    Yields:
+        Session: Сессия базы данных SQLAlchemy.
     """
     db = SessionLocal()
     try:

@@ -9,7 +9,9 @@ import asyncio
 from .database import SessionLocal
 import crud
 
+
 async def cleanup_task():
+    """Фоновая задача для очистки истекших токенов."""
     while True:
         await asyncio.sleep(3600)
         db = SessionLocal()
@@ -19,26 +21,27 @@ async def cleanup_task():
         finally:
             db.close()
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    """Управление жизненным циклом приложения."""
     Base.metadata.create_all(bind=engine)
     task = asyncio.create_task(cleanup_task())
     yield
     task.cancel()
     print("[→] Завершение работы приложения")
 
+
 app = FastAPI(
     title=settings.APP_NAME,
     lifespan=lifespan
 )
 
-# разрешенные пути
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
 ]
 
-# разрешение фронту отправлять запросы на бэк
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -52,9 +55,10 @@ app.include_router(password_reset.router)
 app.include_router(captcha.router)
 app.include_router(test_mode_router)
 
-# декоратор, регестрирующий функцию ping как обработчик GET по пути /ping
+
 @app.get("/ping")
 async def ping():
+    """Проверка доступности сервиса."""
     return {"status": "ok"}
 
 
@@ -62,5 +66,8 @@ async def ping():
 async def health():
     """
     Health check endpoint без загрузки модели.
+
+    Returns:
+        dict: Статус сервиса и имя приложения.
     """
     return {"status": "ok", "service": settings.APP_NAME}

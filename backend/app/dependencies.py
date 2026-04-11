@@ -3,19 +3,25 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 from . import crud, schemas, auth
-from .database import SessionLocal
+from .database import SessionLocal, get_db
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    """
+    Получить текущего аутентифицированного пользователя.
 
+    Args:
+        token: JWT токен из заголовка Authorization.
+        db: Сессия базы данных.
+
+    Returns:
+        Объект пользователя.
+
+    Raises:
+        HTTPException: Если токен недействителен или пользователь не найден.
+    """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",

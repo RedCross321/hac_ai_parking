@@ -8,31 +8,56 @@ load_dotenv()
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
+
 class CaptchaConfigResponse(BaseModel):
+    """Схема ответа с конфигурацией капчи."""
     site_key: str
+
 
 @router.get("/captcha-config", response_model=CaptchaConfigResponse)
 async def get_captcha_config():
+    """
+    Получить конфигурацию SmartCaptcha (site_key).
 
+    Returns:
+        CaptchaConfigResponse: Объект с site_key.
+
+    Raises:
+        HTTPException: Если site_key не настроен на сервере.
+    """
     site_key = os.getenv("YANDEX_SMARTCAPTCHA_SITE_KEY")
-    
+
     if not site_key:
         raise HTTPException(status_code=500, detail="SmartCaptcha Site Key is not configured on server.")
-    
-    # передача клиентского ключа
+
     return CaptchaConfigResponse(site_key=site_key)
 
+
 class CaptchaVerifyRequest(BaseModel):
+    """Схема запроса на проверку капчи."""
     token: str
+
 
 @router.post("/verify-captcha")
 async def verify_captcha(captcha_request: CaptchaVerifyRequest, request: Request):
+    """
+    Проверить токен SmartCaptcha.
 
+    Args:
+        captcha_request: Запрос с токеном капчи.
+        request: HTTP запрос для получения IP пользователя.
+
+    Returns:
+        Сообщение об успешной проверке.
+
+    Raises:
+        HTTPException: Если server_key не настроен или проверка не пройдена.
+    """
     server_key = os.getenv("YANDEX_SMARTCAPTCHA_SERVER_KEY")
 
     if not server_key:
         raise HTTPException(status_code=500, detail="SmartCaptcha Server Key is not configured on server.")
-    
+
     token = captcha_request.token
 
     user_ip = request.client.host

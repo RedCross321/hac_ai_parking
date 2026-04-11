@@ -3,20 +3,18 @@ from typing import List, Optional
 
 
 class Settings(BaseSettings):
-    # Общие настройки
+    """Настройки приложения."""
     APP_NAME: str = "PEasy"
     DEBUG: bool = True
 
-    # База данных
     DATABASE_URL: str = "sqlite:///./test_mode.db"
 
-    # Настройки YOLO-NAS
     YOLO_MODEL_NAME: str = "yolo_nas_l"
     YOLO_NUM_CLASSES: int = 3
     YOLO_CHECKPOINT_PATH: str = "models/average_model.pth"
     YOLO_PRETRAINED_WEIGHTS: Optional[str] = None
     YOLO_CONFIDENCE_THRESHOLD: float = 0.35
-    YOLO_DEVICE: str = "auto"  # auto, cuda, cpu
+    YOLO_DEVICE: str = "auto"
     YOLO_FUSE_MODEL: bool = True
     YOLO_CLASSES: List[str] = [
         "free_parking_space",
@@ -24,9 +22,8 @@ class Settings(BaseSettings):
         "partially_free_parking_space"
     ]
 
-    # Настройки загрузки файлов
     UPLOAD_DIR: str = "uploads"
-    MAX_FILE_SIZE: int = 10 * 1024 * 1024  # 10 MB
+    MAX_FILE_SIZE: int = 10 * 1024 * 1024
     ALLOWED_EXTENSIONS: List[str] = [".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff"]
 
     class Config:
