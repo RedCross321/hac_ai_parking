@@ -1,7 +1,15 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Text, Boolean
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Text, Boolean, Enum
 from sqlalchemy.orm import relationship, declarative_base
 from datetime import datetime
 from .database import Base
+import enum
+
+
+class TripSessionStatus(str, enum.Enum):
+    """Статус сессии поездки."""
+    ACTIVE = "active"
+    COMPLETED = "completed"
+    CANCELLED = "cancelled"
 
 
 class User(Base):
@@ -75,4 +83,40 @@ class UserRequest(Base):
     ip_address = Column(String(50))
     request_data = Column(Text)
     response_status = Column(Integer)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class TripSession(Base):
+    """
+    Сессия поездки пользователя.
+    """
+    __tablename__ = "trip_sessions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    status = Column(String(50), default=TripSessionStatus.ACTIVE.value)
+    start_latitude = Column(Float)
+    start_longitude = Column(Float)
+    end_latitude = Column(Float)
+    end_longitude = Column(Float)
+    started_at = Column(DateTime, default=datetime.utcnow)
+    ended_at = Column(DateTime, nullable=True)
+    cancelled_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
+class Notification(Base):
+    """
+    Уведомления для пользователя.
+    """
+    __tablename__ = "notifications"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    trip_session_id = Column(Integer, ForeignKey("trip_sessions.id"), nullable=True)
+    title = Column(String(255), nullable=False)
+    message = Column(Text, nullable=False)
+    is_read = Column(Boolean, default=False)
+    notification_type = Column(String(50), default="info")
     created_at = Column(DateTime, default=datetime.utcnow)

@@ -11,7 +11,15 @@ from ..schemas import (
     GeoResolveRequest,
     GeoResolveResponse,
     ParkingSearchResponse,
+    TripSessionCreate,
+    TripSessionResponse,
+    TripSessionCancelResponse,
+    NotificationResponse,
+    NotificationsPullResponse,
 )
+from ..dependencies import get_current_user
+from ..models import User
+from .. import crud
 
 router = APIRouter(tags=["user-api"])
 
@@ -173,3 +181,204 @@ def _get_test_snapshot_path() -> str:
             return f"testSnapshots/{selected_image}"
     
     return None
+
+
+# Trip Monitoring Endpoints
+
+@router.post("/trip-monitoring/sessions", response_model=TripSessionResponse)
+async def create_trip_session(
+    request: TripSessionCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Создать новую сессию поездки для текущего пользователя.
+    
+    - **start_latitude**: Начальная широта (опционально)
+    - **start_longitude**: Начальная долгота (опционально)
+    
+    Возвращает созданную сессию поездки со статусом "active".
+    """
+    trip_session = crud.create_trip_session(
+        db=db,
+        user_id=current_user.id,
+        start_latitude=request.start_latitude,
+        start_longitude=request.start_longitude
+    )
+    
+    # Log the request
+    db.add(UserRequest(
+        endpoint="/trip-monitoring/sessions",
+        method="POST",
+        request_data=f"start_lat={request.start_latitude}, start_lon={request.start_longitude}",
+        response_status=200
+    ))
+    db.commit()
+    
+    return trip_session
+
+
+@router.get("/trip-monitoring/sessions/{trip_session_id}", response_model=TripSessionResponse)
+async def get_trip_session(
+    trip_session_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Получить информацию о сессии поездки по ID.
+    
+    - **trip_session_id**: ID сессии поездки
+    
+    Возвращает данные сессии поездки, если она принадлежит текущему пользователю.
+    """
+    trip_session = crud.get_trip_session(db=db, trip_session_id=trip_session_id)
+    
+    if not trip_session:
+        raise HTTPException(status_code=404, detail="Сессия поездки не найдена")
+    
+    # Проверка прав доступа - сессия должна принадлежать текущему пользователю
+    if trip_session.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Доступ запрещен")
+    
+    # Log the request
+    db.add(UserRequest(
+        endpoint=f"/trip-monitoring/sessions/{trip_session_id}",
+        method="GET",
+        request_data="",
+        response_status=200
+    ))
+    db.commit()
+    
+    return trip_session
+
+
+@router.post("/trip-monitoring/sessions/{trip_session_id}/cancel", response_model=TripSessionCancelResponse)
+async def cancel_trip_session(
+    trip_session_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Отменить активную сессию поездки.
+    
+    - **trip_session_id**: ID сессии поездки для отмены
+    
+    Отменяет только активные сессии. Если сессия уже завершена или отменена,
+    возвращается ошибка.
+    """
+    trip_session = crud.get_trip_session(db=db, trip_session_id=trip_session_id)
+    
+    if not trip_session:
+        raise HTTPException(status_code=404, detail="Сессия поездки не найдена")
+    
+    # Проверка прав доступа
+    if trip_session.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Доступ запрещен")
+    
+    # Отмена сессии
+    cancelled_session = crud.cancel_trip_session(db=db, trip_session_id=trip_session_id)
+    
+    if not cancelled_session:
+        raise HTTPException(status_code=400, detail="Не удалось отменить сессию. Возможно, она уже завершена")
+    
+    # Создание уведомления об отмене
+    crud.create_notification(
+        db=db,
+        user_id=current_user.id,
+        title="Поездка отменена",
+        message=f"Сессия поездки #{trip_session_id} была отменена",
+        trip_session_id=trip_session_id,
+        notification_type="info"
+    )
+    
+    # Log the request
+    db.add(UserRequest(
+        endpoint=f"/trip-monitoring/sessions/{trip_session_id}/cancel",
+        method="POST",
+        request_data="",
+        response_status=200
+    ))
+    db.commit()
+    
+    return TripSessionCancelResponse(
+        trip_session_id=cancelled_session.id,
+        status=cancelled_session.status,
+        message="Сессия поездки успешно отменена",
+        cancelled_at=cancelled_session.cancelled_at
+    )
+
+
+@router.get("/trip-monitoring/notifications/pull", response_model=NotificationsPullResponse)
+async def get_notifications_pull(
+    limit: int = Query(50, ge=1, le=100, description="Максимальное количество уведомлений"),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Получить список непрочитанных уведомлений для текущего пользователя.
+    
+    - **limit**: Максимальное количество уведомлений (1-100, по умолчанию 50)
+    
+    Возвращает только непрочитанные уведомления, отсортированные по дате создания
+    (новые первыми). После получения уведомления не помечаются как прочитанные.
+    """
+    notifications = crud.get_unread_notifications(db=db, user_id=current_user.id, limit=limit)
+    
+    # Log the request
+    db.add(UserRequest(
+        endpoint="/trip-monitoring/notifications/pull",
+        method="GET",
+        request_data=f"limit={limit}",
+        response_status=200
+    ))
+    db.commit()
+    
+    return NotificationsPullResponse(
+        notifications=notifications,
+        count=len(notifications)
+    )
+
+
+@router.post("/trip-monitoring/notifications/read", response_model=dict)
+async def mark_notifications_as_read(
+    notification_id: Optional[int] = Query(None, description="ID конкретного уведомления (если не указано, отмечаются все)"),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Отметить уведомления как прочитанные.
+    
+    - **notification_id**: ID конкретного уведомления (опционально).
+      Если не указан, отмечаются все непрочитанные уведомления пользователя.
+    
+    Возвращает количество отмеченных уведомлений.
+    """
+    if notification_id is not None:
+        # Отметить конкретное уведомление
+        notification = crud.mark_notification_as_read(
+            db=db,
+            notification_id=notification_id,
+            user_id=current_user.id
+        )
+        
+        if not notification:
+            raise HTTPException(status_code=404, detail="Уведомление не найдено")
+        
+        count = 1
+    else:
+        # Отметить все уведомления
+        count = crud.mark_all_notifications_as_read(db=db, user_id=current_user.id)
+    
+    # Log the request
+    db.add(UserRequest(
+        endpoint="/trip-monitoring/notifications/read",
+        method="POST",
+        request_data=f"notification_id={notification_id}",
+        response_status=200
+    ))
+    db.commit()
+    
+    return {
+        "marked_count": count,
+        "message": f"Отмечено {count} уведомлений как прочитанные"
+    }
