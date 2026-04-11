@@ -1,12 +1,18 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from app.routers import captcha
 from app.routers import login
+from app.routers import password_reset
 
 from contextlib import asynccontextmanager
 import asyncio
 from app.database import SessionLocal
 from app import crud
+
+from app import crud
+from app.database import engine
+
 
 async def cleanup_task():
     while True:
@@ -26,6 +32,8 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+
+
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
@@ -44,9 +52,12 @@ app.add_middleware(
 
 
 app.include_router(login.router)
+app.include_router(password_reset.router)
 app.include_router(captcha.router)
 
 # декоратор, регестрирующий функцию ping как обработчик GET по пути /ping
 @app.get("/ping")
 async def ping():
     return {"status": "ok"}
+
+

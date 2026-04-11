@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends, HTTPException, status
+from fastapi import APIRouter, HTTPException, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from datetime import timedelta
@@ -63,13 +63,8 @@ def login(
 
 
 # Получение данных текущего пользователя (защищённый эндпоинт)
-@router.get("/users/me", response_model=schemas.UserOut)
-def read_users_me(current_user: models.User = Depends(dependencies.get_current_user)):
-    """
-    GET /users/me
-    Требует заголовок Authorization: Bearer <token>
-    Возвращает данные авторизованного пользователя
-    """
+@router.get("/me", response_model=schemas.UserOut)
+def read_auth_me(current_user: models.User = Depends(dependencies.get_current_user)):
     return current_user
 
 

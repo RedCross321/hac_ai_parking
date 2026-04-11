@@ -38,10 +38,18 @@ export const authAPI = {
   },
   
   // Получить данные текущего пользователя
-  getCurrentUser: () => api.get('/auth/users/me'),
+  getCurrentUser: () => api.get('/auth/me'),
   
   // Выход (передаём токен в теле, хотя бэкенд берёт из заголовка)
   logout: () => api.post('/auth/logout'),
+
+  forgotPassword: (email) => api.post('/auth/forgot-password', { email }),
+
+  resetPassword: (token, new_password) => 
+    api.post('/auth/reset-password', { token, new_password }),
+
 };
+
+
 
 export default api;
