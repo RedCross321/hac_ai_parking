@@ -19,17 +19,20 @@ from ..schemas import (
     DetectionResult,
     DetectionBox
 )
-try:
-    from ..services.yolo_nas_service import get_yolo_service, YoloNasService
-    YOLO_AVAILABLE = True
-except (ImportError, ModuleNotFoundError):
-    YOLO_AVAILABLE = False
-    get_yolo_service = None
-    YoloNasService = None
+from ..services.yolo_nas_service import get_yolo_service, YoloNasService
 from ..core.config import settings
 
 router = APIRouter(prefix="/test", tags=["test-mode"])
 
+def save_uploaded_file(file: UploadFile, upload_dir: str) -> str:
+    os.makedirs(upload_dir, exist_ok=True)
+    ext = os.path.splitext(file.filename)[1] if file.filename else ".jpg"
+    filename = f"{uuid.uuid4()}{ext}"
+    file_path = os.path.join(upload_dir, filename)
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    return file_path
 
 @router.get("/cameras", response_model=List[CameraResponse])
 async def get_cameras(
@@ -109,6 +112,8 @@ async def upload_screenshot(
     db.add(db_snapshot)
     db.commit()
     db.refresh(db_snapshot)
+
+    file_path = save_uploaded_file(file, settings.UPLOAD_DIR)
 
     # Инференс модели
     inference_result = None
