@@ -111,3 +111,26 @@ class HealthResponse(BaseModel):
     status: str
     model_loaded: bool
     device: str
+
+
+class GeoResolveRequest(BaseModel):
+    """Схема запроса для геокодирования адреса."""
+    address: str
+
+
+class GeoResolveResponse(BaseModel):
+    """Схема ответа для геокодирования."""
+    latitude: float
+    longitude: float
+    address: str
+
+
+class ParkingSearchResponse(BaseModel):
+    """Схема ответа для поиска парковки."""
+    total_free: int
+    total_not_free: int
+    total_partially_free: int
+    total_count: int
+    cameras_count: int
+    snapshot_path: Optional[str] = None
+    message: str

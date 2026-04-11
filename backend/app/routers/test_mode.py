@@ -19,7 +19,13 @@ from ..schemas import (
     DetectionResult,
     DetectionBox
 )
-from ..services.yolo_nas_service import get_yolo_service, YoloNasService
+try:
+    from ..services.yolo_nas_service import get_yolo_service, YoloNasService
+    YOLO_AVAILABLE = True
+except (ImportError, ModuleNotFoundError):
+    YOLO_AVAILABLE = False
+    get_yolo_service = None
+    YoloNasService = None
 from ..core.config import settings
 
 router = APIRouter(prefix="/test", tags=["test-mode"])
