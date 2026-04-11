@@ -1,6 +1,6 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional, Dict, Any
 
 class UserCreate(BaseModel):
     username: str
@@ -11,12 +11,7 @@ class UserOut(BaseModel):
     id: int
     username: str
     email: str
-from pydantic import BaseModel, Field
-from typing import List, Optional, Dict, Any
-from datetime import datetime
 
-
-# === Camera Schemas ===
 class CameraBase(BaseModel):
     name: str
     location: Optional[str] = None

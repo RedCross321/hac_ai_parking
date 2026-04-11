@@ -2,6 +2,9 @@ from sqlalchemy.orm import Session
 from . import models, schemas, auth
 from datetime import datetime, timedelta
 import secrets
+from jose import jwt, JWTError
+from datetime import datetime
+from .auth import SECRET_KEY, ALGORITHM
 
 def get_user_by_username(db: Session, username: str):
     return db.query(models.User).filter(models.User.username == username).first()
@@ -41,10 +44,6 @@ def is_token_blacklisted(db: Session, token: str):
     return db.query(models.TokenBlackList).filter(models.TokenBlackList.token == token).first() is not None
 
 def cleanup_expired_token(db: Session):
-
-    from jose import jwt, JWTError
-    from datetime import datetime
-    from app.auth import SECRET_KEY, ALGORITHM
 
     now = datetime.utcnow()
     expired_tokens = []
