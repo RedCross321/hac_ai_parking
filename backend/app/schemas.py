@@ -134,3 +134,59 @@ class ParkingSearchResponse(BaseModel):
     cameras_count: int
     snapshot_path: Optional[str] = None
     message: str
+
+
+# Trip Monitoring Schemas
+
+class TripSessionCreate(BaseModel):
+    """Схема для создания сессии поездки."""
+    start_latitude: Optional[float] = None
+    start_longitude: Optional[float] = None
+
+
+class TripSessionResponse(BaseModel):
+    """Схема ответа с данными сессии поездки."""
+    id: int
+    user_id: int
+    status: str
+    start_latitude: Optional[float] = None
+    start_longitude: Optional[float] = None
+    end_latitude: Optional[float] = None
+    end_longitude: Optional[float] = None
+    started_at: datetime
+    ended_at: Optional[datetime] = None
+    cancelled_at: Optional[datetime] = None
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class TripSessionCancelResponse(BaseModel):
+    """Схема ответа при отмене сессии поездки."""
+    trip_session_id: int
+    status: str
+    message: str
+    cancelled_at: datetime
+
+
+class NotificationResponse(BaseModel):
+    """Схема ответа с данными уведомления."""
+    id: int
+    user_id: int
+    trip_session_id: Optional[int] = None
+    title: str
+    message: str
+    is_read: bool
+    notification_type: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class NotificationsPullResponse(BaseModel):
+    """Схема ответа для pull уведомлений."""
+    notifications: List[NotificationResponse]
+    count: int
