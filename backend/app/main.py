@@ -1,34 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
-
 from .database import engine, Base
-from .routes.test_mode import router as test_mode_router
+from .routers.test_mode import router as test_mode_router
 from .core.config import settings
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Startup
-    Base.metadata.create_all(bind=engine)
-    print("[✓] Таблицы БД созданы")
-    yield
-    # Shutdown
-    print("[→] Завершение работы приложения")
-
-
-from app.routers import captcha
-from app.routers import login
-from app.routers import password_reset
-
+from .routers import captcha, login, password_reset
 from contextlib import asynccontextmanager
 import asyncio
-from app.database import SessionLocal
-from app import crud
-
-from app import crud
-from app.database import engine
-
+from .database import SessionLocal
+import crud
 
 async def cleanup_task():
     while True:
@@ -42,23 +21,12 @@ async def cleanup_task():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    Base.metadata.create_all(bind=engine)
     task = asyncio.create_task(cleanup_task())
     yield
     task.cancel()
+    print("[→] Завершение работы приложения")
 
-app = FastAPI(lifespan=lifespan)
-
-
-
-origins = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-
-]
-
-# разрешение фронту отправлять запросы на бэк
-
-# создание нового объекта класса FastAPI
 app = FastAPI(
     title=settings.APP_NAME,
     lifespan=lifespan
