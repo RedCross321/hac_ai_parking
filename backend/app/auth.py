@@ -160,26 +160,6 @@ async def bootstrap_admin(
         admin_email=request.email
     )
 
-# Эндпоинт для обычного входа
-@router.post("/login")
-async def login(email: str, password: str, db: Session = Depends(get_db)):
-    """Обычный вход пользователя"""
-    user = db.query(User).filter(User.email == email).first()
-    
-    if not user or not verify_password(password, user.hashed_password):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid credentials"
-        )
-    
-    if not user.is_active:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Account is disabled"
-        )
-    
-    return {"message": f"Welcome back, {user.email}!", "is_admin": user.is_admin}
-
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
     Проверить соответствие пароля хешу.
