@@ -54,6 +54,7 @@ class TestCamera(Base):
     location = Column(String(500))
     latitude = Column(Float)
     longitude = Column(Float)
+    stream_url = Column(String(1000), nullable=True)  # URL видеопотока
     status = Column(String(50), default="unknown")
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

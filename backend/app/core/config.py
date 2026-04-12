@@ -29,6 +29,16 @@ class Settings(BaseSettings):
     YANDEX_SMARTCAPTCHA_SERVER_KEY: str 
     YANDEX_SMARTCAPTCHA_SITE_KEY: str
 
+    # Список доступных камер video-sever.ru
+    VIDEO_SERVER_CAMERAS: List[str] = [
+        "https://srt.video-sever.ru:850/player/?key=sps861193Dqw&cam=Zaharova-12-1_cam-5",
+        "https://srt.video-sever.ru:850/player/?key=sps861193Dqw&cam=Zaharova-12-1_cam-6",
+        "https://srt.video-sever.ru:850/player/?key=sps861193Dqw&cam=Zaharova-12-1_cam-7",
+    ]
+    
+    # Интервал обновления скриншотов в секундах (по умолчанию 60 секунд)
+    SCREENSHOT_UPDATE_INTERVAL: int = 60
+
     class Config:
         env_file = ".env"
         case_sensitive = True

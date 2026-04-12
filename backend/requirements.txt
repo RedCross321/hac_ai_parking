@@ -184,3 +184,4 @@ websockets==16.0
 Werkzeug==3.1.8
 wrapt==2.1.2
 xhtml2pdf==0.2.11
+aiohttp>=3.9.0
