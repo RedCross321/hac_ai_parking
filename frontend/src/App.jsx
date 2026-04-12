@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import MainPage from './components/MainPage/MainPage'
 import ProfilePage from './components/ProfilePage/ProfilePage'
 import AdminPage from './components/AdminPage/AdminPage'
