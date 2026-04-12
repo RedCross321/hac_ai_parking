@@ -17,11 +17,11 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-body {
+:global(body) {
     background-color: #ffffff;
     display: flex;
     justify-content: center;
-    min-height: 100vh;
+    min-height: 100dvh;
     z-index: 1;
 }
 
@@ -30,14 +30,13 @@ body {
     max-width: 425px;
     background-color: var(--bg-color);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    padding: 20px 20px 0 20px; /* верх | право | низ | лево */
+    padding: 20px 20px 0 20px;
     position: relative;
 }
 
-/* Header */
 header {
     display: flex;
     gap: 170px;
@@ -50,14 +49,8 @@ header {
     background: rgba(192, 219, 248, 0.1);
 }
 
-.logo-svg {
-    width: 160px;
-}
-
-.profile-icon {
-    width: 50px;
-}
-
+.logo-svg { width: 160px; }
+.profile-icon { width: 50px; }
 
 .logo {
     font-size: 32px;
@@ -91,7 +84,6 @@ header {
     fill: var(--primary-color);
 }
 
-/* Search Section */
 .search-section {
     margin-bottom: 30px;
     display: flex;
@@ -99,7 +91,6 @@ header {
     gap: 10px;
 }
 
-/* Объёмное стекло для input */
 .search-input {
     flex-grow: 1;
     backdrop-filter: blur(23.066667556762695px);
@@ -114,21 +105,14 @@ header {
     transition: all 0.2s ease;
 }
 
-.search-input::placeholder {
-    color: #8a9bb5;
-}
+.search-input::placeholder { color: #8a9bb5; }
 
 .search-input:focus {
-    box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.06),
-        inset 0 1px 3px rgba(255, 255, 255, 0.4),
-        inset 0 -1px 3px rgba(0, 0, 0, 0.05),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), inset 0 1px 3px rgba(255, 255, 255, 0.4), inset 0 -1px 3px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.15);
     border-top-color: rgba(255, 255, 255, 0.4);
     transform: translateY(1px);
 }
 
-/* Объёмная стеклянная кнопка */
 .icon-btn {
     display: flex;
     align-items: center;
@@ -152,22 +136,13 @@ header {
 
 .icon-btn:hover {
     background: rgba(208, 219, 224, 0.8);
-    box-shadow:
-        0 15px 30px -8px rgba(0, 0, 0, 0.12),
-        0 10px 15px -8px rgba(0, 0, 0, 0.08),
-        inset 0 2px 4px rgba(255, 255, 255, 0.6),
-        inset 0 -2px 4px rgba(0, 0, 0, 0.03),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 15px 30px -8px rgba(0, 0, 0, 0.12), 0 10px 15px -8px rgba(0, 0, 0, 0.08), inset 0 2px 4px rgba(255, 255, 255, 0.6), inset 0 -2px 4px rgba(0, 0, 0, 0.03), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
     transform: translateY(-2px);
 }
 
 .icon-btn:active {
     background: rgba(208, 219, 224, 0.6);
-    box-shadow:
-        0 5px 15px -5px rgba(0, 0, 0, 0.08),
-        inset 0 1px 3px rgba(255, 255, 255, 0.3),
-        inset 0 -1px 3px rgba(0, 0, 0, 0.05),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.08), inset 0 1px 3px rgba(255, 255, 255, 0.3), inset 0 -1px 3px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
     transform: translateY(2px);
 }
 
@@ -177,7 +152,6 @@ header {
     fill: var(--primary-color);
 }
 
-/* Content Grid */
 .content-grid {
     display: grid;
     grid-template-columns: 140px 1fr;
@@ -186,7 +160,6 @@ header {
     margin-bottom: 20px;
 }
 
-/* Info Box */
 .info-box {
     background-color: #e8f0fe;
     border-radius: 20px;
@@ -200,9 +173,7 @@ header {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
-.info-item {
-    margin-bottom: 15px;
-}
+.info-item { margin-bottom: 15px; }
 
 .info-label {
     font-size: 14px;
@@ -239,7 +210,6 @@ header {
     color: var(--primary-color);
 }
 
-/* Categories List */
 .categories-list {
     display: flex;
     flex-direction: column;
@@ -267,14 +237,15 @@ header {
 
 .footer {
     background-color: #e8f0fe;
-    padding: 25px 40px 10px 40px; /* верх | право | низ | лево */
+    padding: 25px 40px 10px 40px;
     text-align: center;
-    border-radius: 20px 20px 0 0; /* скругление только сверху */
-    margin-top: auto; /* прижимает футер к низу */
+    border-radius: 20px 20px 0 0;
+    margin-top: auto;
     margin-left: -20px;
     margin-right: -20px;
     position: relative;
     width: calc(100% + 40px);
+    flex-shrink: 0;
 }
 
 .footer-logo {
@@ -283,7 +254,7 @@ header {
     margin-bottom: 10px;
 }
 
-.footer-logo-svg {
+.footer-vct {
     width: 160px;
     height: auto;
 }
@@ -293,106 +264,3 @@ header {
     color: #135b5e;
     margin: 0;
 }
-
-        /* Дополнительные стили только для этой страницы, чтобы не ломать main.css */
-
-        /* Навигация (Табы) */
-        .tabs-nav {
-            display: flex;
-            background-color: #e3eaf2;
-            /* Светлый фон табов */
-            border-radius: 20px;
-            padding: 5px;
-            margin-bottom: 20px;
-            margin-top: 10px;
-            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        .tab-btn {
-            flex: 1;
-            border: none;
-            background: transparent;
-            padding: 10px 5px;
-            border-radius: 15px;
-            font-size: 11px;
-            font-weight: 600;
-            color: #666;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .tab-btn.active {
-            backdrop-filter: blur(26.684968948364258px);
-            box-shadow: inset -5px 5px 5px 0 rgba(154, 175, 198, 0.4), inset -3px 3px 3px 0 rgba(255, 255, 255, 0.4), inset 5px -5px 5px 0 rgba(255, 255, 255, 0.4), inset 3px -3px 3px 0 rgba(154, 175, 198, 0.4);
-            background: rgba(192, 219, 248, 0.1);
-        }
-
-        /* Сетка камер */
-        .cameras-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
-            /* Прокрутка, если карточек много */
-            max-height: calc(100vh - 350px);
-            padding-right: 5px;
-        }
-
-        /* Карточка камеры */
-        .camera-card {
-            background-color: #d4e3ed;
-            /* Цвет как на скрине */
-            border-radius: 12px;
-            padding: 12px 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s;
-        }
-
-        .camera-card:hover {
-            transform: translateY(-2px);
-        }
-
-        .cam-name {
-            font-size: 11px;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 4px;
-        }
-
-        .cam-status {
-            font-size: 11px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        /* Цвета статусов */
-        .status-active {
-            color: #2e7d32;
-        }
-
-        /* Зеленый */
-        .status-inactive {
-            color: #c62828;
-        }
-
-        /* Красный */
-        .status-unavailable {
-            color: #555;
-        }
-
-        /* Серый */
-
-        .cam-date {
-            font-size: 9px;
-            color: #666;
-        }
-
-        /* Логотип в футере через img */
-        .footer-logo-svg {
-            width: 140px;
-            height: auto;
-        }

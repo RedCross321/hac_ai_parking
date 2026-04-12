@@ -1,27 +1,31 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import MainPage from './components/MainPage/MainPage'
+import ProfilePage from './components/ProfilePage/ProfilePage'
+import AdminPage from './components/AdminPage/AdminPage'
+import LoginPage from './components/LoginPage/LoginPage'
+import NoLoginPage from './components/NoLoginPage/NoLoginPage'
+import RegistrationPage from './components/RegistrationPage/RegistrationPage'
+import ResetMailPage from './components/ResetMailPage/ResetMailPage'
+import ResetPasswordPage from './components/ResetPasswordPage/ResetPasswordPage'
+import SearchPage from './components/SearchPage/SearchPage'
+import './index.css'
 
 function App() {
-  const [status, setStatus] = useState('Загрузка...');
-
-  useEffect(() => {
-    axios.get('http://localhost:8000/ping')
-      .then(response => {
-        setStatus(`Статус: ${response.data.status}`);
-      })
-      .catch(error => {
-        console.error('Ошибка при запросе к API:', error);
-        setStatus('Ошибка соединения с сервером');
-      });
-  }, []);
-
   return (
-    <div className="App">
-      <h1>Анализатор парковочных мест</h1>
-      <p>{status}</p>
-    </div>
-  );
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/no-login" element={<NoLoginPage />} />
+        <Route path="/registration" element={<RegistrationPage />} />
+        <Route path="/reset-mail" element={<ResetMailPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route path="/search" element={<SearchPage />} />
+      </Routes>
+    </Router>
+  )
 }
 
-export default App;
+export default App

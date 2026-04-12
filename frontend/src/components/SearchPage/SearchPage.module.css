@@ -6,8 +6,6 @@
     --bg-color: #f8f9fa;
     --white: #ffffff;
     --text-dark: #333333;
-    --text-light: #ffffff;
-    --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 * {
@@ -17,12 +15,11 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-body {
+:global(body) {
     background-color: #ffffff;
     display: flex;
     justify-content: center;
     min-height: 100vh;
-    z-index: 1;
 }
 
 .mobile-container {
@@ -33,11 +30,10 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    padding: 20px 20px 0 20px; /* верх | право | низ | лево */
+    padding: 20px 20px 0 20px;
     position: relative;
 }
 
-/* Header */
 header {
     display: flex;
     gap: 170px;
@@ -45,9 +41,14 @@ header {
     border-radius: 10px;
     align-items: center;
     margin-bottom: 25px;
-    backdrop-filter: blur(7.4607319831848145px);
+    backdrop-filter: blur(7.46px);
     box-shadow: inset -1px 1px 1px 0 rgba(154, 175, 198, 0.4), inset -1px 1px 1px 0 rgba(255, 255, 255, 0.4), inset 1px -1px 1px 0 rgba(255, 255, 255, 0.4), inset 1px -1px 1px 0 rgba(154, 175, 198, 0.4);
     background: rgba(192, 219, 248, 0.1);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
 }
 
 .logo-svg {
@@ -56,42 +57,10 @@ header {
 
 .profile-icon {
     width: 50px;
-}
-
-
-.logo {
-    font-size: 32px;
-    font-weight: 800;
-    color: var(--primary-color);
-    letter-spacing: 2px;
-    display: flex;
-    align-items: center;
-}
-
-.logo svg {
-    width: 36px;
-    height: 36px;
-    margin: 0 -2px;
-    fill: var(--primary-color);
-}
-
-.profile-icon {
-    width: 28px;
-    height: 28px;
-    display: flex;
     border: none;
-    align-items: center;
-    justify-content: center;
     cursor: pointer;
 }
 
-.profile-icon svg {
-    width: 18px;
-    height: 18px;
-    fill: var(--primary-color);
-}
-
-/* Search Section */
 .search-section {
     margin-bottom: 30px;
     display: flex;
@@ -99,10 +68,9 @@ header {
     gap: 10px;
 }
 
-/* Объёмное стекло для input */
 .search-input {
     flex-grow: 1;
-    backdrop-filter: blur(23.066667556762695px);
+    backdrop-filter: blur(23.07px);
     box-shadow: inset -5px 5px 5px 0 rgba(154, 175, 198, 0.4), inset -2px 2px 2px 0 rgba(255, 255, 255, 0.4), inset 5px -5px 5px 0 rgba(255, 255, 255, 0.4), inset 2px -2px 2px 0 rgba(154, 175, 198, 0.4);
     background: rgba(1, 95, 98, 0.132);
     padding: 14px 20px;
@@ -128,16 +96,6 @@ header {
     transform: translateY(1px);
 }
 
-/* Объёмная стеклянная кнопка */
-.icon-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 25px;
-    height: 25px;
-    transition: all 0.15s ease;
-}
-
 .glass-round {
     height: 45px;
     width: 45px;
@@ -145,13 +103,15 @@ header {
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    backdrop-filter: blur(23.066667556762695px);
+    backdrop-filter: blur(23.07px);
     box-shadow: inset -5px 5px 5px 0 rgba(154, 175, 198, 0.4), inset -2px 2px 2px 0 rgba(255, 255, 255, 0.4), inset 5px -5px 5px 0 rgba(255, 255, 255, 0.4), inset 2px -2px 2px 0 rgba(154, 175, 198, 0.4);
     background: rgba(1, 95, 98, 0.686);
+    transition: all 0.15s ease;
+    cursor: pointer;
 }
 
-.icon-btn:hover {
-    background: rgba(208, 219, 224, 0.8);
+.glass-round:hover {
+    background: rgba(1, 95, 98, 0.8);
     box-shadow:
         0 15px 30px -8px rgba(0, 0, 0, 0.12),
         0 10px 15px -8px rgba(0, 0, 0, 0.08),
@@ -161,8 +121,8 @@ header {
     transform: translateY(-2px);
 }
 
-.icon-btn:active {
-    background: rgba(208, 219, 224, 0.6);
+.glass-round:active {
+    background: rgba(1, 95, 98, 0.5);
     box-shadow:
         0 5px 15px -5px rgba(0, 0, 0, 0.08),
         inset 0 1px 3px rgba(255, 255, 255, 0.3),
@@ -171,106 +131,73 @@ header {
     transform: translateY(2px);
 }
 
-.icon-btn svg {
-    width: 20px;
-    height: 20px;
-    fill: var(--primary-color);
+.icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
 }
 
-/* Content Grid */
-.content-grid {
-    display: grid;
-    grid-template-columns: 140px 1fr;
-    margin: 0 auto;
-    z-index: 1;
-    margin-bottom: 20px;
-}
-
-/* Info Box */
-.info-box {
-    background-color: #e8f0fe;
-    border-radius: 20px;
-    padding: 15px;
+.main {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    min-height: 200px;
-    text-align: center;
-    min-width: 150px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-.info-item {
-    margin-bottom: 15px;
-}
-
-.info-label {
-    font-size: 14px;
-    color: var(--text-dark);
-    margin-bottom: 5px;
-    font-weight: 600;
+    gap: 15px;
 }
 
 .address-card {
-    background-color: var(--white);
-    padding: 10px;
-    border-radius: 10px;
-    font-size: 12px;
-    line-height: 1.4;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-}
-
-.car-footer {
-    margin: 0 auto;
-    width: 170px;
-}
-
-.count-card {
-    background-color: var(--white);
-    padding: 10px;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-}
-
-.count-number {
-    font-size: 36px;
-    font-weight: bold;
-    color: var(--primary-color);
-}
-
-/* Categories List */
-.categories-list {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    width: 200px;
-    z-index: -1;
-}
-
-.category-item {
-    background-color: #179fa3;
+    background-color: var(--secondary-color);
     color: var(--white);
-    border-radius: 10px;
-    padding: 0 15px;
+    padding: 18px 20px;
+    border-radius: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 40px;
-    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(90, 159, 162, 0.2);
 }
 
-.category-item span:last-child {
-    font-weight: bold;
-    font-size: 16px;
+.address-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(90, 159, 162, 0.3);
+}
+
+.address-card:active {
+    transform: translateY(0);
+}
+
+.address-text {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    flex: 1;
+}
+
+.address-icon {
+    width: 32px;
+    height: 32px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 15px;
+    flex-shrink: 0;
+}
+
+.address-icon svg {
+    width: 18px;
+    height: 18px;
+    fill: var(--white);
 }
 
 .footer {
     background-color: #e8f0fe;
-    padding: 25px 40px 10px 40px; /* верх | право | низ | лево */
+    padding: 25px 40px 10px 40px;
     text-align: center;
-    border-radius: 20px 20px 0 0; /* скругление только сверху */
-    margin-top: auto; /* прижимает футер к низу */
+    border-radius: 20px 20px 0 0;
+    margin-top: auto;
     margin-left: -20px;
     margin-right: -20px;
     position: relative;
@@ -283,7 +210,7 @@ header {
     margin-bottom: 10px;
 }
 
-.footer-logo-svg {
+.footer-vct {
     width: 160px;
     height: auto;
 }
@@ -293,4 +220,3 @@ header {
     color: #135b5e;
     margin: 0;
 }
-

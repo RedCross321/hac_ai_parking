@@ -6,6 +6,8 @@
     --bg-color: #f8f9fa;
     --white: #ffffff;
     --text-dark: #333333;
+    --text-light: #ffffff;
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 * {
@@ -15,11 +17,12 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-body {
+:global(body) {
     background-color: #ffffff;
     display: flex;
     justify-content: center;
-    min-height: 100vh;
+    min-height: 100dvh;
+    z-index: 1;
 }
 
 .mobile-container {
@@ -27,14 +30,13 @@ body {
     max-width: 425px;
     background-color: var(--bg-color);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     padding: 20px 20px 0 20px;
     position: relative;
 }
 
-/* Header */
 header {
     display: flex;
     gap: 170px;
@@ -62,7 +64,6 @@ header {
     cursor: pointer;
 }
 
-/* Search Section */
 .search-section {
     margin-bottom: 30px;
     display: flex;
@@ -70,7 +71,6 @@ header {
     gap: 10px;
 }
 
-/* Объёмное стекло для input */
 .search-input {
     flex-grow: 1;
     backdrop-filter: blur(23.07px);
@@ -99,7 +99,6 @@ header {
     transform: translateY(1px);
 }
 
-/* Объёмная стеклянная кнопка */
 .glass-round {
     height: 45px;
     width: 45px;
@@ -111,7 +110,6 @@ header {
     box-shadow: inset -5px 5px 5px 0 rgba(154, 175, 198, 0.4), inset -2px 2px 2px 0 rgba(255, 255, 255, 0.4), inset 5px -5px 5px 0 rgba(255, 255, 255, 0.4), inset 2px -2px 2px 0 rgba(154, 175, 198, 0.4);
     background: rgba(1, 95, 98, 0.686);
     transition: all 0.15s ease;
-    cursor: pointer;
 }
 
 .glass-round:hover {
@@ -143,61 +141,18 @@ header {
     height: 25px;
 }
 
-/* Main - Address List */
-.main {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+.slogin {
+    color: #032A37;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
 }
 
-.address-card {
-    background-color: var(--secondary-color);
-    color: var(--white);
-    padding: 18px 20px;
-    border-radius: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 10px rgba(90, 159, 162, 0.2);
+.car-stop {
+    margin: 30px auto;
+    width: 250px;
 }
 
-.address-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(90, 159, 162, 0.3);
-}
-
-.address-card:active {
-    transform: translateY(0);
-}
-
-.address-text {
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1.4;
-    flex: 1;
-}
-
-.address-icon {
-    width: 32px;
-    height: 32px;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 15px;
-    flex-shrink: 0;
-}
-
-.address-icon svg {
-    width: 18px;
-    height: 18px;
-    fill: var(--white);
-}
-
-/* Footer */
 .footer {
     background-color: #e8f0fe;
     padding: 25px 40px 10px 40px;
@@ -225,4 +180,30 @@ header {
     font-size: 12px;
     color: #135b5e;
     margin: 0;
+}
+
+.btn-log {
+    display: flex;
+    margin: 40px auto 20px;
+    gap: 30px;
+}
+
+.logIn-btn {
+    backdrop-filter: blur(23.066667556762695px);
+    box-shadow: inset -5px 5px 5px 0 rgba(154, 175, 198, 0.4), inset -2px 2px 2px 0 rgba(255, 255, 255, 0.4), inset 5px -5px 5px 0 rgba(255, 255, 255, 0.4), inset 2px -2px 2px 0 rgba(154, 175, 198, 0.4);
+    background: rgba(1, 105, 113, 0.384);
+    text-decoration: none;
+    color: #fff;
+    padding: 6px 35px;
+    border-radius: 50px;
+}
+
+.regIn-btn {
+    backdrop-filter: blur(23.066667556762695px);
+    box-shadow: inset -5px 5px 5px 0 rgba(154, 175, 198, 0.4), inset -2px 2px 2px 0 rgba(255, 255, 255, 0.4), inset 5px -5px 5px 0 rgba(255, 255, 255, 0.4), inset 2px -2px 2px 0 rgba(154, 175, 198, 0.4);
+    background: rgba(192, 244, 248, 0.1);
+    color: #185B68;
+    padding: 10px 16px;
+    border-radius: 50px;
+    text-decoration: none;
 }
