@@ -179,10 +179,12 @@ html {
     display: flex;
     flex-direction: column;
     width: 340px;
-    height: auto; /* Было 120px, изменили на auto */
+    height: auto;
+    /* Было 120px, изменили на auto */
     align-items: center;
     justify-content: space-evenly;
-    padding: 15px 20px; /* Было 5px, увеличили для отступов */
+    padding: 15px 20px;
+    /* Было 5px, увеличили для отступов */
     color: #fff;
     box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.25);
     background: rgba(50, 132, 149, 0.45);
@@ -264,7 +266,8 @@ html {
     display: flex;
     align-items: center;
     gap: 10px;
-    width: 100%; /* Добавлено для корректного выравнивания */
+    width: 100%;
+    /* Добавлено для корректного выравнивания */
 }
 
 .adress-name {
@@ -360,4 +363,128 @@ html {
 
 .save-btn:active {
     transform: scale(0.98);
+}
+
+@media (min-width: 768px) {
+    .mobile-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 30px 40px;
+        background-color: #f4f7fc;
+    }
+
+    .header-inner {
+        gap: 100px;
+        justify-content: space-between;
+    }
+
+    .logo-site {
+        width: 200px;
+        height: auto;
+    }
+
+    .profile-info {
+        padding: 0 30px 0 20px;
+        height: 80px;
+    }
+
+    .user-name {
+        font-size: 24px;
+        width: auto;
+    }
+
+    .profile-vector {
+        width: 40px;
+        height: 40px;
+    }
+
+    .main {
+        margin-top: 0;
+        padding-top: 30px;
+    }
+
+    .top {
+        bottom: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+    }
+
+    .adress-title {
+        width: 250px;
+        padding: 12px;
+        font-size: 1.1rem;
+    }
+
+    .adress-div {
+        width: 100%;
+        max-width: 500px;
+        margin: 0;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 20px 30px;
+    }
+
+    .adress-div-min {
+        width: 100%;
+        max-width: 500px;
+        margin: 0;
+        padding: 15px 30px;
+    }
+
+    .home-adress,
+    .work-adress {
+        width: auto;
+        flex: 1;
+    }
+
+    .adress-name {
+        position: static;
+        margin-right: 15px;
+        border-radius: 30px;
+        padding: 5px 20px;
+        font-size: 0.9rem;
+    }
+
+    .adress-txt {
+        margin-left: 0;
+        font-size: 1.1rem;
+    }
+
+    .adress-txt-min {
+        font-size: 1.3rem;
+    }
+
+    .edit-mode {
+        max-width: 500px;
+    }
+
+    .edit-input-row {
+        gap: 20px;
+    }
+
+    .edit-input {
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+
+    .save-btn {
+        padding: 12px 30px;
+        font-size: 1rem;
+    }
+
+    .buttons {
+        margin-top: 40px;
+        gap: 30px;
+    }
+
+    .page-btn-main,
+    .page-logOut {
+        padding: 20px 60px;
+        font-size: 1.2rem;
+    }
+
+    footer {
+        margin-bottom: 20px;
+    }
 }

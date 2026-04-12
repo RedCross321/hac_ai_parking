@@ -49,8 +49,13 @@ header {
     background: rgba(192, 219, 248, 0.1);
 }
 
-.logo-svg { width: 160px; }
-.profile-icon { width: 50px; }
+.logo-svg {
+    width: 160px;
+}
+
+.profile-icon {
+    width: 50px;
+}
 
 .logo {
     font-size: 32px;
@@ -105,7 +110,9 @@ header {
     transition: all 0.2s ease;
 }
 
-.search-input::placeholder { color: #8a9bb5; }
+.search-input::placeholder {
+    color: #8a9bb5;
+}
 
 .search-input:focus {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), inset 0 1px 3px rgba(255, 255, 255, 0.4), inset 0 -1px 3px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.15);
@@ -173,7 +180,9 @@ header {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
-.info-item { margin-bottom: 15px; }
+.info-item {
+    margin-bottom: 15px;
+}
 
 .info-label {
     font-size: 14px;
@@ -263,4 +272,117 @@ header {
     font-size: 12px;
     color: #135b5e;
     margin: 0;
+}
+
+/* Десктопная версия */
+@media (min-width: 768px) {
+    .mobile-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 60px 0;
+        box-shadow: none;
+        background-color: #f4f7fc;
+    }
+
+    header {
+        gap: 0;
+        justify-content: space-between;
+        padding: 15px 30px;
+        margin-bottom: 40px;
+        backdrop-filter: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        background: var(--white);
+        border-radius: 20px;
+    }
+
+    .logo-svg {
+        width: 200px;
+    }
+
+    .profile-icon {
+        width: 60px;
+        transition: transform 0.2s;
+    }
+
+    .profile-icon:hover {
+        transform: scale(1.05);
+    }
+
+    .search-section {
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 50px;
+    }
+
+    .search-input {
+        padding: 18px 28px;
+        font-size: 16px;
+        background: rgba(1, 95, 98, 0.1);
+    }
+
+    .glass-round {
+        height: 55px;
+        width: 55px;
+    }
+
+    .icon-btn {
+        width: 30px;
+        height: 30px;
+    }
+
+    .content-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        max-width: 1000px;
+        margin: 0 auto 30px;
+    }
+
+    .info-box {
+        min-height: 260px;
+        padding: 25px;
+        border-radius: 30px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .info-label {
+        font-size: 18px;
+    }
+
+    .address-card {
+        font-size: 16px;
+        padding: 15px;
+    }
+
+    .count-number {
+        font-size: 48px;
+    }
+
+    .categories-list {
+        width: 100%;
+        gap: 15px;
+    }
+
+    .category-item {
+        height: 55px;
+        font-size: 18px;
+        border-radius: 15px;
+        padding: 0 25px;
+    }
+
+    .car-footer {
+        width: 250px;
+        margin: 20px auto;
+    }
+
+    .footer {
+        margin-left: -60px;
+        margin-right: -60px;
+        width: calc(100% + 120px);
+        padding: 40px 60px 20px;
+    }
+
+    .footer-text {
+        font-size: 16px;
+    }
 }

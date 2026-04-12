@@ -1,4 +1,3 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import MainPage from './components/MainPage/MainPage'
