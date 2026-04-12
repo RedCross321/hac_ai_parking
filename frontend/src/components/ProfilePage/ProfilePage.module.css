@@ -173,15 +173,16 @@ html {
     height: 70px;
 }
 
+/* ИЗМЕНЕНО: height: auto и padding увеличен для вмещения инпутов */
 .adress-div {
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     width: 340px;
-    height: 120px;
+    height: auto; /* Было 120px, изменили на auto */
     align-items: center;
     justify-content: space-evenly;
-    padding: 5px 20px;
+    padding: 15px 20px; /* Было 5px, увеличили для отступов */
     color: #fff;
     box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.25);
     background: rgba(50, 132, 149, 0.45);
@@ -192,7 +193,7 @@ html {
     margin: 0 auto;
     display: flex;
     width: 340px;
-    height: 50px;
+    height: 65px;
     align-items: center;
     justify-content: space-between;
     padding: 5px 20px;
@@ -263,12 +264,13 @@ html {
     display: flex;
     align-items: center;
     gap: 10px;
+    width: 100%; /* Добавлено для корректного выравнивания */
 }
 
 .adress-name {
     background-color: #012B39;
     font-size: 0.7rem;
-    padding: 3px 20px;
+    padding: 3px 12px;
     border-top-right-radius: 50px;
     border-bottom-right-radius: 50px;
     position: absolute;
@@ -283,4 +285,79 @@ html {
 
 :global(footer) {
     margin-bottom: 70px;
+}
+
+/* ===== НОВЫЕ СТИЛИ ДЛЯ РЕДАКТИРОВАНИЯ (Edit Mode) ===== */
+
+.edit-mode {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 5px 0;
+}
+
+.edit-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.edit-label {
+    background-color: #012B39;
+    font-size: 0.7rem;
+    padding: 3px 15px;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    color: #fff;
+}
+
+.edit-input-row {
+    display: flex;
+    margin-top: 8px;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+}
+
+.edit-input {
+    flex: 1;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    font-size: 0.85rem;
+    color: #333;
+    outline: none;
+}
+
+.edit-input::placeholder {
+    color: #8a9bb5;
+    font-size: 0.8rem;
+}
+
+.edit-input:focus {
+    background-color: #fff;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+.save-btn {
+    padding: 8px 18px;
+    background-color: #012B39;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+}
+
+.save-btn:hover {
+    opacity: 0.9;
+}
+
+.save-btn:active {
+    transform: scale(0.98);
 }
