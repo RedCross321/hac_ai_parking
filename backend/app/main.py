@@ -1,20 +1,50 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.database import engine, Base
-from app.auth import router as auth_router
-from app.database import get_db
-from app.models import User
 
-# создание нового объекта класса FastAPI
-app = FastAPI(title="Parking Analyzer API")
+from .auth import router as auth_router
+from .models import User
+from .database import engine, Base, get_db, SessionLocal
+from .routers.test_mode import router as test_mode_router
+from .routers.user import router as user_router
+from .core.config import settings
+from .routers import captcha, login, password_reset
+from contextlib import asynccontextmanager
+import asyncio
+import crud
 
-# разрешенные пути
+
+async def cleanup_task():
+    """Фоновая задача для очистки истекших токенов."""
+    while True:
+        await asyncio.sleep(3600)
+        db = SessionLocal()
+
+        try:
+            crud.cleanup_expired_token(db)
+        finally:
+            db.close()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Управление жизненным циклом приложения."""
+    Base.metadata.create_all(bind=engine)
+    task = asyncio.create_task(cleanup_task())
+    yield
+    task.cancel()
+    print("[→] Завершение работы приложения")
+
+
+app = FastAPI(
+    title=settings.APP_NAME,
+    lifespan=lifespan
+)
+
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-] 
+]
 
-# разрешение фронту отправлять запросы на бэк
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -23,29 +53,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ПОДКЛЮЧАЕМ НАШИ АВТОРИЗАЦИОННЫЕ ЭНДПОИНТЫ
-# Все эндпоинты из auth.py будут доступны с префиксом /auth
 app.include_router(auth_router)
-
-# СОЗДАЕМ ТАБЛИЦЫ В БАЗЕ ДАННЫХ ПРИ ЗАПУСКЕ
 Base.metadata.create_all(bind=engine)
 
-# декоратор, регистрирующий функцию ping как обработчик GET по пути /ping
-@app.get("/ping")
-async def ping():
-    return {"status": "ok"}
-
-# Добавим корневой эндпоинт для проверки работы API
-@app.get("/")
-async def root():
-    return {"message": "Parking Analyzer API is running", "status": "healthy"}
-
-# Добавим эндпоинт для проверки здоровья
-@app.get("/health")
-async def health_check():
-    return {"status": "ok"}
-
-# ПРОВЕРКА ПРИ ЗАПУСКЕ - есть ли уже администратор
 @app.on_event("startup")
 async def startup_event():
     """При запуске сервера проверяем состояние bootstrap"""
@@ -66,8 +76,26 @@ async def startup_event():
             print("\n✅ Система готова к работе. Администратор уже существует.\n")
     except Exception as e:
         print(f"⚠️ Ошибка при проверке администратора: {e}")
+        
+app.include_router(login.router)
+app.include_router(password_reset.router)
+app.include_router(captcha.router)
+app.include_router(test_mode_router)
+app.include_router(user_router)
 
-# Для прямого запуска (опционально)
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
+
+@app.get("/ping")
+async def ping():
+    """Проверка доступности сервиса."""
+    return {"status": "ok"}
+
+
+@app.get("/health")
+async def health():
+    """
+    Health check endpoint без загрузки модели.
+
+    Returns:
+        dict: Статус сервиса и имя приложения.
+    """
+    return {"status": "ok", "service": settings.APP_NAME}
