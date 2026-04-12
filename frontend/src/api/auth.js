@@ -7,7 +7,6 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-// Добавляем токен ко всем запросам, если он есть
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('access_token');
   if (token) {
@@ -16,18 +15,10 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Auth API
 export const authAPI = {
-  // Получить site_key для капчи
   getCaptchaConfig: () => api.get('/auth/captcha-config'),
-  
-  // Проверить капчу
   verifyCaptcha: (token) => api.post('/auth/verify-captcha', { token }),
-  
-  // Регистрация
   register: (userData) => api.post('/auth/register', userData),
-  
-  // Логин (form-urlencoded, как ожидает OAuth2PasswordRequestForm)
   login: (username, password) => {
     const formData = new URLSearchParams();
     formData.append('username', username);
@@ -36,20 +27,18 @@ export const authAPI = {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
   },
-  
-  // Получить данные текущего пользователя
   getCurrentUser: () => api.get('/auth/me'),
-  
-  // Выход (передаём токен в теле, хотя бэкенд берёт из заголовка)
   logout: () => api.post('/auth/logout'),
-
   forgotPassword: (email) => api.post('/auth/forgot-password', { email }),
-
-  resetPassword: (token, new_password) => 
+  resetPassword: (token, new_password) =>
     api.post('/auth/reset-password', { token, new_password }),
-
 };
 
-
+// Дополнительные API для камер и поиска
+export const camerasAPI = {
+  getAvailable: () => api.get('/cameras/available'),
+  searchParking: (params) => api.get('/parking/search', { params }),
+  resolveGeo: (address) => api.post('/geo/resolve', { address }),
+};
 
 export default api;
