@@ -7,7 +7,7 @@ const camerasData = [
     { id: 3, name: 'UNI_02-46328', status: 'unavailable', date: '12.04.2026 14:00' },
     { id: 4, name: 'UNI_02-46328', status: 'active', date: '12.04.2026 14:00' },
     { id: 5, name: 'UNI_02-46328', status: 'active', date: '12.04.2026 14:00' },
-    { id: 6, name: 'UNI_02-46328', status: 'active', date: '12.04.2026 14:00' },
+    { id: 6, name: 'UNI_02-26328', status: 'active', date: '12.04.2026 14:00' },
     { id: 7, name: 'UNI_02-46328', status: 'active', date: '12.04.2026 14:00' },
     { id: 8, name: 'UNI_02-46328', status: 'active', date: '12.04.2026 14:00' },
     { id: 9, name: 'UNI_02-46328', status: 'active', date: '12.04.2026 14:00' },

@@ -8,9 +8,6 @@ function NoLoginPage() {
                 <div className={styles['logo']}>
                     <img src="src/assets/logo.svg" alt="Логотип" className={styles['logo-svg']} />
                 </div>
-                <Link to="/profile">
-                    <img src="src/assets/profile.svg" alt="профиль" className={styles['profile-icon']} />
-                </Link>
             </header>
 
             <div className={styles['search-section']}>
