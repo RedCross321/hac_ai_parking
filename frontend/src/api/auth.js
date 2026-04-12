@@ -24,7 +24,7 @@ export const authAPI = {
   // Проверить капчу
   verifyCaptcha: (token) => api.post('/auth/verify-captcha', { token }),
   
-  // Регистрация
+  // Регистрация (ожидает username, email, password)
   register: (userData) => api.post('/auth/register', userData),
   
   // Логин (form-urlencoded, как ожидает OAuth2PasswordRequestForm)
@@ -40,16 +40,15 @@ export const authAPI = {
   // Получить данные текущего пользователя
   getCurrentUser: () => api.get('/auth/me'),
   
-  // Выход (передаём токен в теле, хотя бэкенд берёт из заголовка)
+  // Выход
   logout: () => api.post('/auth/logout'),
 
+  // Запрос на сброс пароля
   forgotPassword: (email) => api.post('/auth/forgot-password', { email }),
 
+  // Сброс пароля
   resetPassword: (token, new_password) => 
     api.post('/auth/reset-password', { token, new_password }),
-
 };
-
-
 
 export default api;

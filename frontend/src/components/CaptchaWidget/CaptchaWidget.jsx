@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { SmartCaptcha } from '@yandex/smart-captcha';
-import { authAPI } from '../api/auth';
+import { authAPI } from '../../api/auth';
 
 const CaptchaWidget = ({ onVerify, resetTrigger }) => {
   const [siteKey, setSiteKey] = useState('');
@@ -12,7 +12,6 @@ const CaptchaWidget = ({ onVerify, resetTrigger }) => {
       .catch(err => console.error('Failed to load captcha config', err));
   }, []);
 
-  // Сброс капчи при изменении resetTrigger
   useEffect(() => {
     if (resetTrigger > 0) {
       setCaptchaKey(prev => prev + 1);

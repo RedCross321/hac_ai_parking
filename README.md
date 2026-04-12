@@ -1,4 +1,4 @@
-# Запуск сервера бэкэнда: uvicorn app.main:app --reload --port 8000
+# Запуск сервера бэкэнда: uvicorn app.main:app --reload --port 8001
 
 # hac_ai_parking
 
