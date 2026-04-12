@@ -1,72 +1,31 @@
-import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import axios from 'axios';
-import './App.css';
-import LoginForm from './components/LoginForm';
-import RegisterForm from './components/RegisterForm';
-import UserDashboard from './components/UserDashboard';
-import ForgotPasswordForm from './components/ForgotPasswordForm';
-import ResetPasswordForm from './components/ResetPasswordForm';
-import BootstrapAdmin from './components/BootstrapAdmin';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import MainPage from './components/MainPage/MainPage'
+import ProfilePage from './components/ProfilePage/ProfilePage'
+import AdminPage from './components/AdminPage/AdminPage'
+import LoginPage from './components/LoginPage/LoginPage'
+import NoLoginPage from './components/NoLoginPage/NoLoginPage'
+import RegistrationPage from './components/RegistrationPage/RegistrationPage'
+import ResetMailPage from './components/ResetMailPage/ResetMailPage'
+import ResetPasswordPage from './components/ResetPasswordPage/ResetPasswordPage'
+import SearchPage from './components/SearchPage/SearchPage'
+import './index.css'
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('access_token'));
-  // mode: 'login', 'register', 'forgot'
-  const [mode, setMode] = useState('login');
-
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-  };
-
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-  };
-
-  const handleRegisterSuccess = () => {
-    setMode('login');
-  };
-
-  // Проверяем, есть ли в URL параметр token (для сброса пароля)
-  const urlParams = new URLSearchParams(window.location.search);
-  const resetToken = urlParams.get('token');
-
-  if (resetToken) {
-    // Если есть токен, показываем форму сброса пароля
-    return <ResetPasswordForm />;
-  }
-
-  if (isLoggedIn) {
-    return <UserDashboard onLogout={handleLogout} />;
-  }
-
   return (
-    <div style={{ maxWidth: '400px', margin: '50px auto' }}>
-      {mode === 'register' && (
-        <>
-          <RegisterForm onSuccess={handleRegisterSuccess} />
-          <p>
-            Уже есть аккаунт?{' '}
-            <button onClick={() => setMode('login')}>Войти</button>
-          </p>
-        </>
-      )}
-      {mode === 'login' && (
-        <>
-          <LoginForm onLogin={handleLogin} />
-          <p>
-            Нет аккаунта?{' '}
-            <button onClick={() => setMode('register')}>Зарегистрироваться</button>
-          </p>
-          <p>
-            <button onClick={() => setMode('forgot')}>Забыли пароль?</button>
-          </p>
-        </>
-      )}
-      {mode === 'forgot' && (
-        <ForgotPasswordForm onBackToLogin={() => setMode('login')} />
-      )}
-    </div>
-  );
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/no-login" element={<NoLoginPage />} />
+        <Route path="/registration" element={<RegistrationPage />} />
+        <Route path="/reset-mail" element={<ResetMailPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route path="/search" element={<SearchPage />} />
+      </Routes>
+    </Router>
+  )
 }
 
-export default App;
+export default App
