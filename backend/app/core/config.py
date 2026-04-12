@@ -26,6 +26,9 @@ class Settings(BaseSettings):
     MAX_FILE_SIZE: int = 10 * 1024 * 1024
     ALLOWED_EXTENSIONS: List[str] = [".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff"]
 
+    YANDEX_SMARTCAPTCHA_SERVER_KEY: str 
+    YANDEX_SMARTCAPTCHA_SITE_KEY: str
+
     class Config:
         env_file = ".env"
         case_sensitive = True
