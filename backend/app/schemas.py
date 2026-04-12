@@ -2,6 +2,21 @@ from pydantic import BaseModel, EmailStr, Field
 from datetime import datetime
 from typing import List, Optional
 
+class BootstrapAdminRequest(BaseModel):
+    email: EmailStr
+    password: str
+    confirm_password: str
+
+class BootstrapAdminResponse(BaseModel):
+    message: str
+    admin_email: str
+
+class TokenResponse(BaseModel):
+    bootstrap_token: str
+    message: str
+
+class ErrorResponse(BaseModel):
+    detail: str
 
 class UserCreate(BaseModel):
     """Схема для создания пользователя."""

@@ -98,6 +98,7 @@ opencv-python==4.11.0.86
 opencv-python-headless==4.11.0.86
 oscrypto==1.3.0
 packaging==26.0
+passlib==1.7.4
 pandas==2.3.3
 pillow==12.2.0
 pip-tools==7.5.3

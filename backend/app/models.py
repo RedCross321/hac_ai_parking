@@ -22,7 +22,17 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     reset_token = Column(String, nullable=True)
     reset_token_expires = Column(DateTime, nullable=True)
-
+    is_admin = Column(Boolean, default=False)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    
+class BootstrapState(Base):
+    __tablename__ = "bootstrap_state"
+    
+    id = Column(Integer, primary_key=True)
+    is_used = Column(Boolean, default=False)
+    bootstrap_token = Column(String, unique=True, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
 class TokenBlackList(Base):
     """Модель черного списка токенов."""

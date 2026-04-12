@@ -1,13 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .database import engine, Base
+
+from .auth import router as auth_router
+from .models import User
+from .database import engine, Base, get_db, SessionLocal
 from .routers.test_mode import router as test_mode_router
 from .routers.user import router as user_router
 from .core.config import settings
 from .routers import captcha, login, password_reset
 from contextlib import asynccontextmanager
 import asyncio
-from .database import SessionLocal
 import crud
 
 
@@ -51,6 +53,30 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(auth_router)
+Base.metadata.create_all(bind=engine)
+
+@app.on_event("startup")
+async def startup_event():
+    """При запуске сервера проверяем состояние bootstrap"""
+    try:
+        db = next(get_db())
+        admin_exists = db.query(User).filter(User.is_admin == True).first() is not None
+        
+        if not admin_exists:
+            print("\n" + "="*60)
+            print("🔐 ПЕРВЫЙ ЗАПУСК! НАСТРОЙКА АДМИНИСТРАТОРА")
+            print("="*60)
+            print("📌 Доступные эндпоинты для настройки:")
+            print("   GET  http://localhost:8000/auth/bootstrap-token")
+            print("   POST http://localhost:8000/auth/bootstrap-admin")
+            print("\n⚠️  Эти эндпоинты будут отключены после создания первого админа!")
+            print("="*60 + "\n")
+        else:
+            print("\n✅ Система готова к работе. Администратор уже существует.\n")
+    except Exception as e:
+        print(f"⚠️ Ошибка при проверке администратора: {e}")
+        
 app.include_router(login.router)
 app.include_router(password_reset.router)
 app.include_router(captcha.router)
