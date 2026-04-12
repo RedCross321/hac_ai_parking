@@ -78,7 +78,7 @@ function RegistrationPage() {
 
         <button type="submit" className={styles['submit-btn']}>Зарегистрироваться</button>
         <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-          <Link to="/login">Уже есть аккаунт? Войти</Link>
+          <Link to="/login" className={styles['regist-link']}>Уже есть аккаунт? Войти</Link>
         </div>
       </form>
     </div>

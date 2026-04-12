@@ -253,6 +253,7 @@ html {
     padding: 20px 40px;
     color: #ffff;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .top {

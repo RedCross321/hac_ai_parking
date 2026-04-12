@@ -5,21 +5,33 @@ import styles from './ProfilePage.module.css';
 
 function ProfilePage() {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     authAPI.getCurrentUser()
-      .then(res => setUser(res.data))
-      .catch(() => navigate('/no-login'));
+      .then(res => {
+        setUser(res.data);
+        setLoading(false);
+      })
+      .catch(() => {
+        navigate('/no-login');
+      });
   }, [navigate]);
 
   const handleLogout = async () => {
-    await authAPI.logout();
-    localStorage.removeItem('access_token');
-    navigate('/login');
+    try {
+      await authAPI.logout();
+    } catch (err) {
+      console.error('Ошибка при выходе:', err);
+    } finally {
+      localStorage.removeItem('access_token');
+      navigate('/login');
+    }
   };
 
-  if (!user) return <div>Загрузка...</div>;
+  if (loading) return <div className={styles['mobile-container']}>Загрузка...</div>;
+  if (!user) return null;
 
   return (
     <div className={styles['mobile-container']}>
@@ -37,6 +49,7 @@ function ProfilePage() {
 
       <main className={styles['main']}>
         <div className={`${styles['container']} ${styles['top']}`}>
+          
           <div className={styles['adress-title']}>
             <p className={styles['adress-title-txt']}>Имя пользователя</p>
           </div>
@@ -49,7 +62,7 @@ function ProfilePage() {
           <div className={styles['adress-div-min']}>
             <p className={styles['adress-txt-min']}>{user.email}</p>
           </div>
-          {/* Остальные статичные поля адресов можно оставить как есть */}
+          
         </div>
       </main>
 
@@ -57,7 +70,9 @@ function ProfilePage() {
         <div className={styles['container']}>
           <div className={styles['buttons']}>
             <Link to="/" className={styles['page-btn-main']}>Главная</Link>
-            <button onClick={handleLogout} className={styles['page-logOut']}>Выйти</button>
+            <button onClick={handleLogout} className={styles['page-logOut']}>
+              Выйти
+            </button>
           </div>
         </div>
       </footer>

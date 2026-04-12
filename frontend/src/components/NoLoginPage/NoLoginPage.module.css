@@ -59,7 +59,8 @@ header {
 }
 
 .profile-icon {
-    width: 50px;
+    display: none;
+    width: 40px;
     border: none;
     cursor: pointer;
 }
@@ -142,7 +143,7 @@ header {
 }
 
 .slogin {
-    color: #032A37;
+    color: #032A37;gap: 170px;
     text-align: center;
     font-size: 1.5rem;
     font-weight: 600;
@@ -206,4 +207,72 @@ header {
     padding: 10px 16px;
     border-radius: 50px;
     text-decoration: none;
+}
+
+@media (min-width: 768px) {
+    .mobile-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        background: transparent;
+        box-shadow: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100dvh;
+    }
+
+    header {
+        max-width: 600px;
+        margin: 0 auto 30px;
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
+        justify-content: space-between;
+    }
+
+    .logo-svg {
+        width: 200px;
+    }
+
+    .profile-icon {
+        display: none;
+        width: 40px;
+    }
+
+    .search-section {
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .search-input {
+        padding: 16px 24px;
+        font-size: 16px;
+    }
+
+    .glass-round {
+        height: 55px;
+        width: 55px;
+    }
+
+    .slogin {
+        font-size: 2rem;
+        margin-top: 40px;
+    }
+
+    .car-stop {
+        width: 200px;
+        margin: 40px auto;
+    }
+
+    .btn-log {
+        gap: 40px;
+    }
+
+    .logIn-btn,
+    .regIn-btn {
+        padding: 12px 50px;
+        font-size: 1.2rem;
+    }
 }
