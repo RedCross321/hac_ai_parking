@@ -16,12 +16,48 @@ from ..schemas import (
     TripSessionCancelResponse,
     NotificationResponse,
     NotificationsPullResponse,
+    CameraResponse,
 )
 from ..dependencies import get_current_user
 from ..models import User
 from .. import crud
+from ..core.config import settings
 
 router = APIRouter(tags=["user-api"])
+
+
+@router.get("/cameras/available", response_model=List[CameraResponse])
+async def get_available_cameras(
+    db: Session = Depends(get_db)
+):
+    """
+    Получить список всех доступных камер с видеопотоками.
+    
+    Возвращает камеры из предустановленного списка video-sever.ru,
+    а также добавленные пользователем камеры.
+    """
+    # Получаем камеры из базы данных
+    db_cameras = db.query(TestCamera).all()
+    
+    # Если в БД нет камер с URL, инициализируем их из конфига
+    if not db_cameras or all(c.stream_url is None for c in db_cameras):
+        # Добавляем камеры из конфигурации
+        for idx, url in enumerate(settings.VIDEO_SERVER_CAMERAS):
+            # Извлекаем название камеры из URL
+            cam_name = url.split("cam=")[-1] if "cam=" in url else f"Camera-{idx+1}"
+            
+            db_camera = TestCamera(
+                name=cam_name,
+                location=f"video-sever.ru - Камера {idx+1}",
+                stream_url=url,
+                status="pending"
+            )
+            db.add(db_camera)
+        
+        db.commit()
+        db_cameras = db.query(TestCamera).all()
+    
+    return db_cameras
 
 
 @router.post("/geo/resolve", response_model=GeoResolveResponse)

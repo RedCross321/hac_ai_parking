@@ -8,6 +8,7 @@ from .routers.test_mode import router as test_mode_router
 from .routers.user import router as user_router
 from .core.config import settings
 from .routers import captcha, login, password_reset
+from .services.camera_stream_service import scheduled_camera_update
 from contextlib import asynccontextmanager
 import asyncio
 import crud
@@ -25,13 +26,27 @@ async def cleanup_task():
             db.close()
 
 
+async def camera_update_task():
+    """Фоновая задача для периодического обновления скриншотов камер."""
+    # Даем время приложению полностью запуститься
+    await asyncio.sleep(5)
+    await scheduled_camera_update()
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Управление жизненным циклом приложения."""
     Base.metadata.create_all(bind=engine)
-    task = asyncio.create_task(cleanup_task())
+    
+    # Запускаем фоновые задачи
+    cleanup_task_handle = asyncio.create_task(cleanup_task())
+    camera_update_task_handle = asyncio.create_task(camera_update_task())
+    
     yield
-    task.cancel()
+    
+    # Отменяем задачи при остановке
+    cleanup_task_handle.cancel()
+    camera_update_task_handle.cancel()
     print("[→] Завершение работы приложения")
 
 
